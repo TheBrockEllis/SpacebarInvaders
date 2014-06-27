@@ -13,6 +13,7 @@ var canvas,
     ship,
     enemy,
     score = 0,
+    highScore = 0,
     lives = 3,
     alive = true,
     starfield,
@@ -71,13 +72,21 @@ function reset(){
 function scoreTotal(){
     ctx.font = 'bold 18px VT323';
     ctx.fillStyle = "#fff";
+   
+    ctx.fillText("High Score: ", 10, 80);
+    ctx.fillText(highScore, 110, 80);
+    
     ctx.fillText("Score: ", 10, 55);
     ctx.fillText(score, 70, 55);
 
     ctx.fillText("Lives: ", 10, 30);
-    ctx.fillText(lives, 68, 30);
+    ctx.fillText(lives, 70, 30);
     
     if(!alive){
+        //check if current score is higher than stored high score
+        highScore = localStorage.getItem("score");
+        if(score > highScore) localStorage.setItem("score", score);
+
         ctx.fillText("Game Over!", 245, height / 2);
         ctx.fillRect( (width / 2) - 70, (height / 2) + 10, 120, 40);
         ctx.fillStyle = '#000';
@@ -170,6 +179,11 @@ function init(){
     
     //get the context of the canvas (need to read up on...)
     ctx = canvas.getContext('2d');
+
+    //fetch highscore from localstorage
+    if(localStorage.getItem("score")){
+        highScore = localStorage.getItem("score");
+    }
 
     //create new image for enemy
     enemy = new Image();
